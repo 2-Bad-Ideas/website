@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2 Bad Ideas — Indie Game Studio</title>
+  <meta name="description" content="2 Bad Ideas is a small indie game studio building Stick Together — an open world survival game where you play as sticks. Two bad ideas. One good studio." />
+  <meta property="og:title" content="2 Bad Ideas — Indie Game Studio" />
+  <meta property="og:description" content="Two bad ideas. One good studio. Building Stick Together — an open world survival adventure." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      /* Type scale */
+      --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+      --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+      --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+      --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+      --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+      --text-2xl:  clamp(2rem,     1.2rem  + 2.5vw,  3.5rem);
+      --text-3xl:  clamp(2.5rem,   1rem    + 4vw,    5rem);
+      --text-hero: clamp(3rem,     0.5rem  + 7vw,    8rem);
+
+      /* Spacing */
+      --space-1:  0.25rem;
+      --space-2:  0.5rem;
+      --space-3:  0.75rem;
+      --space-4:  1rem;
+      --space-5:  1.25rem;
+      --space-6:  1.5rem;
+      --space-8:  2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+      --space-20: 5rem;
+      --space-24: 6rem;
+      --space-32: 8rem;
+
+      /* Radius */
+      --radius-sm:   0.375rem;
+      --radius-md:   0.5rem;
+      --radius-lg:   0.75rem;
+      --radius-full: 9999px;
+
+      /* Transition */
+      --transition-interactive: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* Content widths */
+      --content-narrow:  640px;
+      --content-default: 960px;
+      --content-wide:    1200px;
+
+      /* Fonts */
+      --font-display: 'Bebas Neue', Georgia, serif;
+      --font-body:    'Satoshi', Arial, sans-serif;
+
+      /* Brand */
+      --crimson:        #8b0000;
+      --crimson-hover:  #6f0000;
+      --crimson-dim:    rgba(139, 0, 0, 0.15);
+      --crimson-glow:   rgba(139, 0, 0, 0.08);
+    }
+
+    /* Dark palette (primary — this site is dark-only) */
+    [data-theme="dark"], :root {
+      --color-bg:             #0e0c0c;
+      --color-surface:        #141111;
+      --color-surface-2:      #1a1717;
+      --color-surface-offset: #201c1c;
+      --color-border:         #2c2626;
+      --color-divider:        #231f1f;
+      --color-text:           #e2dede;
+      --color-text-muted:     #7a7272;
+      --color-text-faint:     #4a4444;
+      --shadow-md:   0 4px  12px rgba(0,0,0,0.4);
+      --shadow-lg:   0 12px 32px rgba(0,0,0,0.6);
+    }
+
+    /* ============================================================
+       BASE RESET
+    ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      -webkit-text-size-adjust: none;
+      text-size-adjust: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--space-16);
+    }
+    body {
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.65;
+      color: var(--color-text);
+      background-color: var(--color-bg);
+      overflow-x: hidden;
+    }
+    img, picture, video, canvas, svg {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+    ul[role="list"], ol[role="list"] { list-style: none; }
+    input, button, textarea, select { font: inherit; color: inherit; }
+    h1, h2, h3, h4, h5, h6 {
+      text-wrap: balance;
+      line-height: 1.1;
+      font-family: var(--font-display);
+    }
+    p, li { text-wrap: pretty; max-width: 68ch; }
+    ::selection {
+      background: rgba(139, 0, 0, 0.3);
+      color: var(--color-text);
+    }
+    :focus-visible {
+      outline: 2px solid var(--crimson);
+      outline-offset: 3px;
+      border-radius: var(--radius-sm);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    button { cursor: pointer; background: none; border: none; }
+    a, button, [role="button"], input, textarea, select {
+      transition:
+        color var(--transition-interactive),
+        background var(--transition-interactive),
+        border-color var(--transition-interactive),
+        box-shadow var(--transition-interactive),
+        opacity var(--transition-interactive);
+    }
+    a { color: inherit; text-decoration: none; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
+    }
+
+    /* ============================================================
+       LAYOUT UTILITIES
+    ============================================================ */
+    .container {
+      width: 100%;
+      max-width: var(--content-wide);
+      margin-inline: auto;
+      padding-inline: clamp(var(--space-6), 5vw, var(--space-16));
+    }
+    .container--narrow {
+      max-width: var(--content-narrow);
+    }
+    .container--default {
+      max-width: var(--content-default);
+    }
+
+    /* ============================================================
+       TYPOGRAPHY
+    ============================================================ */
+    .label {
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+    .crimson { color: var(--crimson); }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--crimson);
+      color: #fff;
+      border: 2px solid var(--crimson);
+    }
+    .btn-primary:hover {
+      background: var(--crimson-hover);
+      border-color: var(--crimson-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(139, 0, 0, 0.4);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--color-text);
+      border: 2px solid var(--color-border);
+    }
+    .btn-outline:hover {
+      border-color: var(--color-text-muted);
+      color: var(--color-text);
+      transform: translateY(-1px);
+    }
+    .btn-discord {
+      background: transparent;
+      color: var(--color-text);
+      border: 2px solid var(--color-border);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-md);
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn-discord:hover {
+      border-color: #5865F2;
+      color: #7289da;
+      transform: translateY(-1px);
+    }
+
+    /* ============================================================
+       HEADER / NAV
+    ============================================================ */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(14, 12, 12, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition:
+        border-color var(--transition-interactive),
+        box-shadow var(--transition-interactive);
+    }
+    .site-header.scrolled {
+      border-bottom-color: var(--color-divider);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-8);
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--color-text);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-logo span { color: var(--crimson); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .nav-links a:hover { color: var(--color-text); }
+    .nav-discord {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-text-muted);
+      border: 1px solid var(--color-border);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-discord:hover {
+      color: #7289da;
+      border-color: #5865F2;
+    }
+    .nav-mobile-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: var(--space-2);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .nav-mobile-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--color-text);
+      border-radius: 2px;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: var(--space-4);
+      padding: var(--space-6) clamp(var(--space-6), 5vw, var(--space-16));
+      border-top: 1px solid var(--color-divider);
+      background: var(--color-bg);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: var(--text-base);
+      font-weight: 500;
+      color: var(--color-text-muted);
+    }
+    .mobile-menu a:hover { color: var(--color-text); }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    .hero {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      padding-block: clamp(var(--space-24), 12vw, var(--space-32));
+      padding-top: calc(64px + clamp(var(--space-16), 8vw, var(--space-32)));
+      position: relative;
+      overflow: hidden;
+    }
+    /* subtle crimson radial gradient behind hero */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139, 0, 0, 0.09) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .hero-label {
+      margin-bottom: var(--space-6);
+    }
+    .hero-heading {
+      font-size: var(--text-hero);
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      line-height: 0.9;
+      margin-bottom: var(--space-8);
+      color: var(--color-text);
+    }
+    .hero-heading .word-ideas {
+      color: var(--crimson);
+    }
+    .hero-tagline {
+      font-family: var(--font-body);
+      font-size: var(--text-lg);
+      font-style: italic;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-8);
+      max-width: 52ch;
+      line-height: 1.5;
+    }
+    .hero-body {
+      font-size: var(--text-base);
+      color: var(--color-text-muted);
+      max-width: 52ch;
+      line-height: 1.7;
+      margin-bottom: var(--space-10);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      align-items: center;
+    }
+    /* Grain texture overlay */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 256px 256px;
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ============================================================
+       SECTION SHARED STYLES
+    ============================================================ */
+    .section {
+      padding-block: clamp(var(--space-16), 8vw, var(--space-32));
+      border-top: 1px solid var(--color-divider);
+    }
+    .section-label {
+      margin-bottom: var(--space-6);
+    }
+    .section-heading {
+      font-size: var(--text-3xl);
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      line-height: 1.0;
+      color: var(--color-text);
+      margin-bottom: var(--space-4);
+    }
+    .section-sub {
+      font-size: var(--text-lg);
+      font-family: var(--font-body);
+      font-weight: 400;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-6);
+    }
+    .section-body {
+      font-size: var(--text-base);
+      color: var(--color-text-muted);
+      line-height: 1.75;
+      max-width: 58ch;
+    }
+
+    /* ============================================================
+       GAME SECTION
+    ============================================================ */
+    #game {
+      background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-surface) 40%, var(--color-bg) 100%);
+    }
+    .game-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(var(--space-12), 6vw, var(--space-24));
+      align-items: center;
+    }
+    .game-art-wrap {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface-offset);
+      aspect-ratio: 16 / 10;
+    }
+    /* Placeholder key art — stylized dark illustration feel */
+    .game-art-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse 70% 70% at 50% 60%, rgba(139, 0, 0, 0.18) 0%, transparent 70%),
+        linear-gradient(160deg, #0e0a0a 0%, #1a1010 40%, #0d0c0c 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Stick figure silhouettes — SVG art */
+    .game-art-svg {
+      width: 70%;
+      max-width: 320px;
+      opacity: 0.9;
+    }
+    .game-art-badge {
+      position: absolute;
+      top: var(--space-4);
+      left: var(--space-4);
+      background: var(--crimson);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+    }
+    .game-art-glow {
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 60px rgba(139, 0, 0, 0.14);
+      pointer-events: none;
+    }
+    .game-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+    .game-moresome {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--color-text-faint);
+      font-style: italic;
+    }
+
+    /* ============================================================
+       ABOUT SECTION
+    ============================================================ */
+    #about {
+      background: var(--color-bg);
+    }
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(var(--space-12), 6vw, var(--space-24));
+      align-items: start;
+    }
+    .about-left {}
+    .about-right {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+    .about-right p {
+      font-size: var(--text-base);
+      color: var(--color-text-muted);
+      line-height: 1.75;
+    }
+    .about-est {
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-top: var(--space-4);
+    }
+    /* Decorative rule accent */
+    .accent-rule {
+      width: 48px;
+      height: 3px;
+      background: var(--crimson);
+      border-radius: 2px;
+      margin-bottom: var(--space-8);
+    }
+
+    /* ============================================================
+       UPDATES SECTION
+    ============================================================ */
+    #updates {
+      background: var(--color-surface);
+    }
+    .updates-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(var(--space-12), 6vw, var(--space-24));
+      align-items: center;
+    }
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .form-row {
+      display: flex;
+      gap: var(--space-3);
+    }
+    .form-input {
+      flex: 1;
+      background: var(--color-surface-offset);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-5);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--color-text);
+      outline: none;
+    }
+    .form-input::placeholder { color: var(--color-text-faint); }
+    .form-input:focus {
+      border-color: var(--crimson);
+      box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.15);
+    }
+    .form-note {
+      font-size: var(--text-xs);
+      color: var(--color-text-faint);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       CONTACT SECTION
+    ============================================================ */
+    #contact {
+      background: var(--color-bg);
+    }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(var(--space-12), 6vw, var(--space-24));
+      align-items: start;
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .form-label {
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+    .form-textarea {
+      background: var(--color-surface-offset);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-5);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      color: var(--color-text);
+      outline: none;
+      resize: vertical;
+      min-height: 120px;
+    }
+    .form-textarea::placeholder { color: var(--color-text-faint); }
+    .form-textarea:focus {
+      border-color: var(--crimson);
+      box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.15);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .site-footer {
+      border-top: 1px solid var(--color-divider);
+      background: var(--color-surface);
+      padding-block: clamp(var(--space-10), 5vw, var(--space-16));
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: start;
+      gap: var(--space-8);
+      margin-bottom: var(--space-8);
+    }
+    .footer-brand .footer-logo {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--color-text);
+      margin-bottom: var(--space-2);
+    }
+    .footer-brand .footer-logo span { color: var(--crimson); }
+    .footer-brand p {
+      font-size: var(--text-xs);
+      color: var(--color-text-faint);
+      font-style: italic;
+      max-width: 32ch;
+    }
+    .footer-nav {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-3);
+      text-align: center;
+    }
+    .footer-nav a {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      text-decoration: none;
+    }
+    .footer-nav a:hover { color: var(--color-text); }
+    .footer-right {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--color-divider);
+      padding-top: var(--space-6);
+      text-align: center;
+      font-size: var(--text-xs);
+      color: var(--color-text-faint);
+    }
+
+    /* ============================================================
+       DECORATIVE DIVIDER
+    ============================================================ */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--color-divider) 30%, var(--color-divider) 70%, transparent 100%);
+    }
+
+    /* ============================================================
+       SCROLL FADE-IN ANIMATION
+    ============================================================ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 900px) {
+      .game-layout,
+      .about-inner,
+      .updates-inner,
+      .contact-inner {
+        grid-template-columns: 1fr;
+      }
+      .game-art-wrap {
+        order: -1;
+      }
+      .footer-top {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .footer-nav { align-items: center; }
+      .footer-right { justify-content: center; }
+      .footer-brand p { max-width: 100%; }
+    }
+    @media (max-width: 640px) {
+      .nav-links, .nav-discord { display: none; }
+      .nav-mobile-toggle { display: flex; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .form-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
+  <header class="site-header" id="site-header" role="banner">
+    <div class="container">
+      <nav class="nav-inner" aria-label="Main navigation">
+        <a href="#" class="nav-logo" aria-label="2 Bad Ideas home">
+          2 Bad <span>Ideas.</span>
+        </a>
+        <ul class="nav-links" role="list">
+          <li><a href="#game">Our Game</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#updates">Updates</a></li>
+        </ul>
+        <a href="https://discord.gg/3nP9DAK4" class="nav-discord" target="_blank" rel="noopener noreferrer" aria-label="Join our Discord server">
+          Discord ↗
+        </a>
+        <button class="nav-mobile-toggle" id="mobile-toggle" aria-label="Open mobile menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+    </div>
+    <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
+      <a href="#game" onclick="closeMobile()">Our Game</a>
+      <a href="#about" onclick="closeMobile()">About</a>
+      <a href="#updates" onclick="closeMobile()">Updates</a>
+      <a href="https://discord.gg/3nP9DAK4" target="_blank" rel="noopener noreferrer">Discord ↗</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============================================================
+         HERO
+    ============================================================ -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="container hero-inner">
+        <p class="label hero-label fade-in">Indie Game Studio</p>
+        <h1 class="hero-heading fade-in fade-in-delay-1" id="hero-heading">
+          2 Bad<br><span class="word-ideas">Ideas.</span>
+        </h1>
+        <p class="hero-tagline fade-in fade-in-delay-2">
+          we are just two bad ideas away from a good one...
+        </p>
+        <p class="hero-body fade-in fade-in-delay-3">
+          We're a small indie studio building our first original title from the ground up — no publisher, no shortcuts, no templates. Just two people making a game they'd actually want to play.
+        </p>
+        <div class="hero-actions fade-in fade-in-delay-4">
+          <a href="#game" class="btn btn-primary">See Our First Game</a>
+          <a href="https://discord.gg/3nP9DAK4" class="btn-discord" target="_blank" rel="noopener noreferrer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.021.013.042.03.054a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+            </svg>
+            Join the Discord
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         GAME SECTION
+    ============================================================ -->
+    <section class="section" id="game" aria-labelledby="game-heading">
+      <div class="container">
+        <div class="game-layout">
+
+          <!-- Key Art -->
+          <div class="game-art-wrap fade-in">
+            <img
+              src="key-art.jpg"
+              alt="Stick Together key art — a wooden stick character with leaf sprouts stands in a golden-hour meadow before a crashed wooden structure, with the title STICK TOGETHER below"
+              style="width:100%;height:100%;object-fit:cover;display:block;"
+            />
+            <div class="game-art-badge" aria-label="Game status: In Development">IN DEVELOPMENT</div>
+          </div>
+
+          <!-- Game Info -->
+          <div class="game-content">
+            <p class="label section-label fade-in">Our First Game</p>
+            <h2 class="section-heading fade-in fade-in-delay-1" id="game-heading">Stick Together.</h2>
+            <p class="section-sub fade-in fade-in-delay-1">An open world survival game.</p>
+            <p class="section-body fade-in fade-in-delay-2">
+              Stick Together is an open world survival adventure where you play as sticks. Explore, build, and endure — but the world's a lot less hostile when you've got someone to face it with. A game about holding on.
+            </p>
+            <p class="game-moresome fade-in fade-in-delay-3">More soon.</p>
+            <div class="fade-in fade-in-delay-3">
+              <a href="#updates" class="btn btn-outline">Follow the Journey</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ABOUT SECTION
+    ============================================================ -->
+    <section class="section" id="about" aria-labelledby="about-heading">
+      <div class="container">
+        <div class="about-inner">
+          <div class="about-left fade-in">
+            <div class="accent-rule" aria-hidden="true"></div>
+            <h2 class="section-heading" id="about-heading">Two bad ideas.<br>One good studio.</h2>
+          </div>
+          <div class="about-right">
+            <p class="fade-in fade-in-delay-1">
+              We believe the best games come from a specific kind of stubbornness — the refusal to make something forgettable. We're not here to chase trends or ship fast. We're building games that stick with you because they feel like nothing else you've played.
+            </p>
+            <p class="fade-in fade-in-delay-2">
+              2 Bad Ideas is small, independent, and deeply intentional. Two people. One game. We built this studio because we wanted to make something we'd actually want to play — and we haven't stopped wanting to play it yet.
+            </p>
+            <p class="about-est fade-in fade-in-delay-3">EST. 2026</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         UPDATES SECTION
+    ============================================================ -->
+    <section class="section" id="updates" aria-labelledby="updates-heading">
+      <div class="container">
+        <div class="updates-inner">
+          <div class="fade-in">
+            <p class="label section-label">Development Updates</p>
+            <h2 class="section-heading" id="updates-heading">Follow the Journey.</h2>
+            <p class="section-body" style="margin-top: var(--space-4);">
+              Jump into our Discord — that's where we post updates, share progress, and talk about what we're building. It's the best place to follow Stick Together as it comes to life.
+            </p>
+          </div>
+          <div class="fade-in fade-in-delay-2">
+            <a href="https://discord.gg/3nP9DAK4" class="btn btn-primary" target="_blank" rel="noopener noreferrer" style="gap: var(--space-3); font-size: var(--text-base); padding: var(--space-4) var(--space-8);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.021.013.042.03.054a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+              </svg>
+              Join the Discord
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-top">
+
+        <!-- Brand -->
+        <div class="footer-brand">
+          <p class="footer-logo">2 Bad <span>Ideas.</span></p>
+          <p>Two bad ideas. One good studio.</p>
+        </div>
+
+        <!-- Nav -->
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="#game">Our Game</a>
+          <a href="#about">About</a>
+          <a href="#updates">Updates</a>
+        </nav>
+
+        <!-- Discord -->
+        <div class="footer-right">
+          <a
+            href="https://discord.gg/3nP9DAK4"
+            class="btn-discord"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Join the 2 Bad Ideas Discord server"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.021.013.042.03.054a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+            </svg>
+            Join the Discord
+          </a>
+        </div>
+
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 2 Bad Ideas. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+    // --- Scroll-aware header ---
+    (function () {
+      const header = document.getElementById('site-header');
+      window.addEventListener('scroll', () => {
+        header.classList.toggle('scrolled', window.scrollY > 20);
+      }, { passive: true });
+    })();
+
+    // --- Mobile menu ---
+    (function () {
+      const toggle = document.getElementById('mobile-toggle');
+      const menu   = document.getElementById('mobile-menu');
+      toggle.addEventListener('click', () => {
+        const open = menu.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+    })();
+    function closeMobile() {
+      document.getElementById('mobile-menu').classList.remove('open');
+      document.getElementById('mobile-toggle').setAttribute('aria-expanded', 'false');
+    }
+
+    // --- Scroll fade-in ---
+    (function () {
+      const els = document.querySelectorAll('.fade-in');
+      if (!window.IntersectionObserver) {
+        els.forEach(el => el.classList.add('visible'));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => io.observe(el));
+    })();
+
+
+  </script>
+
+</body>
+</html>
