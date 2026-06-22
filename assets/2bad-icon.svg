@@ -1,0 +1,23 @@
+<svg width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .logo-main,
+    .logo-sub {
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      font-weight: 400;
+      text-anchor: middle;
+      letter-spacing: -0.07em;
+    }
+    .logo-2bad { fill: #ffffff; }
+    .logo-ideas { fill: #e3000f; }
+  </style>
+
+  <!-- Brand background (icons must be opaque) -->
+  <rect x="0" y="0" width="800" height="800" fill="#0e0c0c" />
+
+  <!-- Text "2BAD" -->
+  <text x="400" y="387" font-size="288" class="logo-main logo-2bad">2BAD</text>
+
+  <!-- Text "IDEAS" -->
+  <text x="400" y="617" font-size="256" class="logo-sub logo-ideas">IDEAS</text>
+
+</svg>
